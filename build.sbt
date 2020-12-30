@@ -4,6 +4,7 @@ import sbt.Keys.scalaVersion
 val circeV = "0.13.0"
 val http4sV = "0.21.14"
 val http4sClientV = "0.3.2"
+val doobieV = "0.9.0"
 val log4catsV = "1.1.1"
 val logbackClassicV = "1.2.3"
 val pureConfigV = "0.14.0"
@@ -49,6 +50,9 @@ lazy val server =
         "org.http4s" %% "http4s-circe" % http4sV,
         "io.circe" %% "circe-generic" % circeV,
         "io.circe" %% "circe-parser" % circeV,
+        "org.tpolecat" %% "doobie-core" % doobieV,
+        "org.tpolecat" %% "doobie-hikari" % doobieV,
+        "org.tpolecat" %% "doobie-postgres" % doobieV,
         "com.github.pureconfig" %% "pureconfig" % pureConfigV,
         "com.github.pureconfig" %% "pureconfig-http4s" % pureConfigV,
         "io.chrisdavenport" %% "log4cats-slf4j" % log4catsV,
