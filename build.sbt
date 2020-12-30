@@ -1,19 +1,23 @@
 import sbt.Keys.scalaVersion
 
-// Scala
+//Scala
 val circeV = "0.13.0"
-val http4sV = "0.21.13"
+val http4sV = "0.21.14"
 val http4sClientV = "0.3.2"
 val log4catsV = "1.1.1"
 val logbackClassicV = "1.2.3"
 val pureConfigV = "0.14.0"
+//Test
+val testcontainersV = "0.38.8"
 //Spark
 val sparkV = "3.0.1"
+val framelessV = "0.9.0"
 //compiler plugins
 val betterMonadicForV = "0.3.1"
-val kindProjectorV = "0.11.0"
+val kindProjectorV = "0.11.2"
 
 lazy val commonSettings = Seq(
+  scalaVersion := "2.12.12",
   addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForV),
   addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorV cross CrossVersion.full)
 )
@@ -25,7 +29,10 @@ lazy val processor =
     .settings(commonSettings)
     .settings(
       libraryDependencies ++= Seq(
-        "org.apache.spark" %% "spark-sql" % sparkV
+        "org.apache.spark" %% "spark-sql" % sparkV,
+        "org.typelevel" %% "frameless-dataset" % framelessV,
+        "com.dimafeng" %% "testcontainers-scala-postgresql" % testcontainersV % Test,
+        "com.dimafeng" %% "testcontainers-scala-munit" % testcontainersV % Test
       )
     )
 
@@ -54,7 +61,6 @@ lazy val root = project
   .in(file("."))
   .settings(
     name := "games big data showcase",
-    version := "0.1",
-    scalaVersion := "2.12.10"
+    version := "0.1"
   )
   .aggregate(processor, server)

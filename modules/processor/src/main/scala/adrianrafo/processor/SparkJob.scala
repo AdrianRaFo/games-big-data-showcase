@@ -1,5 +1,3 @@
 package adrianrafo.processor
 
-object SparkJob {
-
-}
+object SparkJob {}
