@@ -1,5 +1,6 @@
 package adrianrafo.server
 
+import adrianrafo.server.config.RawgConfig
 import cats.effect.Sync
 import cats.implicits._
 import io.circe.Json

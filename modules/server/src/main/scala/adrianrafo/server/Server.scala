@@ -1,5 +1,6 @@
 package adrianrafo.server
 
+import adrianrafo.server.config.RawgConfig
 import cats.effect.{Blocker, ConcurrentEffect, ContextShift, ExitCode, Timer}
 import org.http4s.implicits._
 import org.http4s.client.{Client, JavaNetClientBuilder}
