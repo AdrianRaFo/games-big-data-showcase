@@ -20,8 +20,15 @@ val kindProjectorV = "0.11.2"
 
 lazy val commonSettings = Seq(
   scalaVersion := "2.12.12",
+  Test / fork := true,
   addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForV),
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorV cross CrossVersion.full)
+  addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorV cross CrossVersion.full),
+  libraryDependencies ++= Seq(
+    "org.scalatest" %% "scalatest-funsuite" % "3.2.3" % Test,
+    "org.scalatest" %% "scalatest-shouldmatchers" % "3.2.3" % Test,
+    "com.dimafeng" %% "testcontainers-scala-postgresql" % testcontainersV % Test,
+    "com.dimafeng" %% "testcontainers-scala-scalatest" % testcontainersV % Test
+  )
 )
 
 lazy val processor =
@@ -32,9 +39,7 @@ lazy val processor =
     .settings(
       libraryDependencies ++= Seq(
         "org.apache.spark" %% "spark-sql" % sparkV,
-        "org.typelevel" %% "frameless-dataset" % framelessV,
-        "com.dimafeng" %% "testcontainers-scala-postgresql" % testcontainersV % Test,
-        "com.dimafeng" %% "testcontainers-scala-munit" % testcontainersV % Test
+        "org.typelevel" %% "frameless-dataset" % framelessV
       )
     )
 
