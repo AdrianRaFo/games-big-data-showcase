@@ -1,9 +1,10 @@
 package adrianrafo.server.rawg
 
 import cats.implicits._
-import io.circe.Decoder
+import io.circe._
 import io.circe.generic.semiauto.deriveDecoder
 import org.http4s.Uri
+import org.http4s.circe._
 
 import java.time.{LocalDate, LocalDateTime}
 
@@ -49,7 +50,7 @@ object Game {
   final case class EsrbRating(id: Int, slug: EsrbSlug, name: EsrbName)
 
   final case class Platform(
-    id: Integer,
+    id: Int,
     name: String,
     slug: String,
     releasedAt: Option[String],
@@ -67,7 +68,7 @@ object Game {
     implicit val platformDecoder: Decoder[Platform] = Decoder.instance { h =>
       val platform = h.downField("platform")
       (
-        platform.get[Integer]("id"),
+        platform.get[Int]("id"),
         platform.get[String]("name"),
         platform.get[String]("slug"),
         h.get[Option[String]]("releasedAt"),
@@ -77,16 +78,56 @@ object Game {
 
   }
 
-  case class ParentPlatform() //TODO
+  case class ParentPlatform(id: Int, name: String, slug: String)
 
-  case class Genre() //TODO
+  object ParentPlatform {
+    implicit val platformDecoder: Decoder[ParentPlatform] = Decoder.instance { h =>
+      val platform = h.downField("platform")
+      (
+        platform.get[Int]("id"),
+        platform.get[String]("name"),
+        platform.get[String]("slug")
+        ).mapN(ParentPlatform.apply)
+    }
+  }
 
-  case class Store() //TODO
+  case class Genre(id: Int, name: String, slug: String, gamesCount: Int, imageBackground: String)
 
-  case class Clip() //TODO
+  case class Store(id: Int, name: String, slug: String, domain: String, gamesCount: Int, imageBackground: Uri)
 
-  case class Tag() //TODO
+  object Store {
+    implicit val storeDecoder: Decoder[Store] = Decoder.instance { h =>
+      val store = h.downField("store")
+      (
+        store.get[Int]("id"),
+        store.get[String]("name"),
+        store.get[String]("slug"),
+        store.get[String]("domain"),
+        store.get[Int]("games_count"),
+        store.get[Uri]("image_background")
+        ).mapN(Store.apply)
+    }
+  }
 
-  case class ShortScreenshot() //TODO
+  case class Clip(clip320p: Uri, clip640p: Uri, full: Uri, video: String, preview: Uri)
+
+  object Clip {
+
+    implicit val clipDecoder: Decoder[Clip] = Decoder.instance { h =>
+      val clips = h.downField("clips")
+      (
+        clips.get[Uri]("320"),
+        clips.get[Uri]("640"),
+        clips.get[Uri]("full"),
+        h.get[String]("video"),
+        h.get[Uri]("preview")
+        ).mapN(Clip.apply)
+    }
+
+  }
+
+  case class Tag(id: Int, name: String, slug: String, language: String, gamesCount: Int, imageBackground: String)
+
+  case class ShortScreenshot(id: Int, image: String)
 
 }
