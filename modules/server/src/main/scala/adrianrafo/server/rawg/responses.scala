@@ -1,73 +1,15 @@
 package adrianrafo.server.rawg
 
-import enumeratum.EnumEntry.Hyphencase
-import enumeratum._
-import enumeratum.values.StringEnumEntry
+import cats.implicits._
+import io.circe.Decoder
+import io.circe.generic.semiauto.deriveDecoder
 import org.http4s.Uri
 
-import java.time.{LocalDate, LocalDateTime, ZonedDateTime}
+import java.time.{LocalDate, LocalDateTime}
 
 final case class PagedResponse[A](count: Int, next: Option[Uri], previous: Option[Uri], results: List[A])
 
 final case class Developer(id: Int, name: String, slug: String, games_count: Int, imageBackground: Uri)
-
-final case class GameRatings(id: Int, title: String, count: Int, percent: Double)
-
-final case class GameAddedByStatus(yet: Int, owned: Int, beaten: Int, toplay: Int, dropped: Int, playing: Int)
-
-sealed trait EsrbSlug extends Hyphencase
-
-object EsrbSlug extends Enum[EsrbSlug] with CirceEnum[EsrbSlug] {
-
-  case object Everyone extends EsrbSlug
-
-  case object Everyone10Plus extends EsrbSlug
-
-  case object Teen extends EsrbSlug
-
-  case object Mature extends EsrbSlug
-
-  case object AdultsOnly extends EsrbSlug
-
-  case object RatingPending extends EsrbSlug
-
-  val values = findValues
-}
-
-sealed abstract class EsrbName(val value: String) extends StringEnumEntry
-
-object EsrbName extends Enum[EsrbName] with CirceEnum[EsrbName] {
-
-  case object Everyone extends EsrbName("Everyone")
-
-  case object Everyone10Plus extends EsrbName("Everyone 10+")
-
-  case object Teen extends EsrbName("Teen")
-
-  case object Mature extends EsrbName("Mature")
-
-  case object AdultsOnly extends EsrbName("Adults Only")
-
-  case object RatingPending extends EsrbName("Rating Pending")
-
-  val values = findValues
-}
-
-final case class EsrbRating(id: Int, slug: EsrbSlug, name: EsrbName)
-
-final case class GamePlatform(
-  platform: GamePlatform.Platform,
-  releasedAt: Option[String],
-  requirements: Option[GamePlatform.Requirements]
-)
-
-object GamePlatform {
-
-  final case class Platform(id: Integer, slug: String, name: String)
-
-  final case class Requirements(minimum: String, recommended: String)
-
-}
 
 final case class Game(
   id: Int,
@@ -78,16 +20,73 @@ final case class Game(
   backgroundImage: Uri,
   rating: Int,
   ratingTop: Int,
-  ratings: List[GameRatings],
+  ratings: List[Game.Ratings],
   ratingsCount: Int,
   reviewsTextCount: String,
   added: Int,
-  addedByStatus: GameAddedByStatus,
+  addedByStatus: Game.AddedByStatus,
   metacritic: Int,
   playtime: Int,
   suggestionsCount: Int,
   updated: LocalDateTime,
   reviewsCount: Int,
-  esrbRating: Option[EsrbRating],
-  platform: List[GamePlatform]
+  platform: List[Game.Platform],
+  parentPlatforms: List[Game.ParentPlatform],
+  genres: List[Game.Genre],
+  stores: List[Game.Store],
+  clip: Game.Clip,
+  tags: List[Game.Tag],
+  esrbRating: Option[Game.EsrbRating],
+  shortScreenshots: List[Game.ShortScreenshot]
 )
+
+object Game {
+
+  final case class Ratings(id: Int, title: String, count: Int, percent: Double)
+
+  final case class AddedByStatus(yet: Int, owned: Int, beaten: Int, toplay: Int, dropped: Int, playing: Int)
+
+  final case class EsrbRating(id: Int, slug: EsrbSlug, name: EsrbName)
+
+  final case class Platform(
+    id: Integer,
+    name: String,
+    slug: String,
+    releasedAt: Option[String],
+    requirements: Option[Platform.Requirements]
+  )
+
+  object Platform {
+
+    final case class Requirements(minimum: String, recommended: String)
+
+    object Requirements {
+      implicit val requirementsDecoder: Decoder[Requirements] = deriveDecoder
+    }
+
+    implicit val platformDecoder: Decoder[Platform] = Decoder.instance { h =>
+      val platform = h.downField("platform")
+      (
+        platform.get[Integer]("id"),
+        platform.get[String]("name"),
+        platform.get[String]("slug"),
+        h.get[Option[String]]("releasedAt"),
+        h.get[Option[Platform.Requirements]]("requirements_en")
+        ).mapN(Platform.apply)
+    }
+
+  }
+
+  case class ParentPlatform() //TODO
+
+  case class Genre() //TODO
+
+  case class Store() //TODO
+
+  case class Clip() //TODO
+
+  case class Tag() //TODO
+
+  case class ShortScreenshot() //TODO
+
+}
