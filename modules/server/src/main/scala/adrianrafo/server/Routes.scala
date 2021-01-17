@@ -17,7 +17,6 @@ class Routes[F[_] : Sync](config: RawgConfig, client: Client[F]) extends Http4sD
   }
 
 }
-
 object Routes {
   def apply[F[_] : Sync](config: RawgConfig, client: Client[F]): HttpRoutes[F] =
     new Routes(config, client).httpRoutes

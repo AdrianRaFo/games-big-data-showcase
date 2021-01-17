@@ -2,6 +2,7 @@ import sbt.Keys.scalaVersion
 
 //Scala
 val circeV = "0.13.0"
+val enumeratumV = "1.6.0"
 val http4sV = "0.21.15"
 val http4sClientV = "0.3.3"
 val doobieV = "0.9.4"
@@ -56,6 +57,9 @@ lazy val server =
         "org.http4s" %% "http4s-circe" % http4sV,
         "io.circe" %% "circe-generic" % circeV,
         "io.circe" %% "circe-parser" % circeV,
+        "com.beachape" %% "enumeratum" % enumeratumV,
+        "com.beachape" %% "enumeratum-circe" % enumeratumV,
+        "com.beachape" %% "enumeratum-doobie" % enumeratumV,
         "org.tpolecat" %% "doobie-core" % doobieV,
         "org.tpolecat" %% "doobie-hikari" % doobieV,
         "org.tpolecat" %% "doobie-postgres" % doobieV,

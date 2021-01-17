@@ -6,6 +6,7 @@ import doobie.util.ExecutionContexts
 import doobie.util.transactor.Transactor
 
 object ConfigLoader {
+
   def loadTransactor[F[_] : Async : ContextShift](dbConfig: PostgresConfig): F[Transactor[F]] =
     Sync[F].delay(
       Transactor.fromDriverManager[F](
