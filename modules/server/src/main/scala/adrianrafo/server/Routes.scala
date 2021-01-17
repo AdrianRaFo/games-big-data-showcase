@@ -1,23 +1,24 @@
 package adrianrafo.server
 
-import adrianrafo.server.config.RawgConfig
-import cats.effect.Sync
+import adrianrafo.server.rawg.RawgClient
+import cats.effect.{Concurrent, Sync}
 import cats.implicits._
-import io.circe.Json
+import io.chrisdavenport.log4cats.Logger
 import org.http4s._
-import org.http4s.client.Client
 import org.http4s.dsl.Http4sDsl
-import org.http4s.circe.CirceEntityDecoder._
 
-class Routes[F[_] : Sync](config: RawgConfig, client: Client[F]) extends Http4sDsl[F] {
+class Routes[F[_] : Sync : Concurrent](rawgClient: RawgClient[F], logger: Logger[F]) extends Http4sDsl[F] {
 
   val httpRoutes: HttpRoutes[F] = HttpRoutes.of[F] {
-    case _@POST -> Root / "transfer" / "data" =>
-      client.expect[Json](s"${config.baseUri}") *> Ok()
+    case _@POST -> Root / "transfer" / "data" / "games" =>
+      Concurrent[F].start(rawgClient.getGames().compile.drain.attempt.flatMap {
+        case Left(ex) => logger.error(ex)("Unexpected error running games transfer")
+        case _        => logger.info("Game transfer successfully finished")
+      }) *> Accepted()
   }
 
 }
 object Routes {
-  def apply[F[_] : Sync](config: RawgConfig, client: Client[F]): HttpRoutes[F] =
-    new Routes(config, client).httpRoutes
+  def apply[F[_] : Sync : Concurrent](rawgClient: RawgClient[F], logger: Logger[F]): HttpRoutes[F] =
+    new Routes(rawgClient, logger).httpRoutes
 }
