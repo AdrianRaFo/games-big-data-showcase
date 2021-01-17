@@ -1,53 +1,48 @@
 package adrianrafo.server.rawg
 
-import cats.implicits._
-import io.circe._
-import io.circe.generic.semiauto.deriveDecoder
 import org.http4s.Uri
-import org.http4s.circe._
 
 import java.time.{LocalDate, LocalDateTime}
-
-final case class PagedResponse[A](count: Int, next: Option[Uri], previous: Option[Uri], results: List[A])
-
-final case class Developer(id: Int, name: String, slug: String, games_count: Int, imageBackground: Uri)
+import io.circe._
+import cats.implicits._
+import io.circe.generic.semiauto.deriveDecoder
+import org.http4s.circe._
 
 final case class Game(
   id: Int,
   slug: String,
   name: String,
   released: LocalDate,
-  tba: Boolean,
-  backgroundImage: Uri,
+  tba: Boolean, //To be announced
   rating: Int,
   ratingTop: Int,
   ratings: List[Game.Ratings],
   ratingsCount: Int,
-  reviewsTextCount: String,
-  added: Int,
-  addedByStatus: Game.AddedByStatus,
   metacritic: Int,
   playtime: Int,
-  suggestionsCount: Int,
   updated: LocalDateTime,
   reviewsCount: Int,
   platform: List[Game.Platform],
   parentPlatforms: List[Game.ParentPlatform],
   genres: List[Game.Genre],
   stores: List[Game.Store],
-  clip: Game.Clip,
   tags: List[Game.Tag],
-  esrbRating: Option[Game.EsrbRating],
-  shortScreenshots: List[Game.ShortScreenshot]
+  esrbRating: Option[Game.EsrbRating]
 )
 
 object Game {
 
-  final case class Ratings(id: Int, title: String, count: Int, percent: Double)
+  final case class Ratings(id: Int, title: RatingSlug, count: Int, percent: Double)
 
-  final case class AddedByStatus(yet: Int, owned: Int, beaten: Int, toplay: Int, dropped: Int, playing: Int)
+  object Ratings {
+    implicit val ratingsDecoder: Decoder[Ratings] = deriveDecoder
+  }
 
-  final case class EsrbRating(id: Int, slug: EsrbSlug, name: EsrbName)
+  final case class EsrbRating(id: Int, slug: EsrbSlug, name: String)
+
+  object EsrbRating {
+    implicit val esrbRatingDecoder: Decoder[EsrbRating] = deriveDecoder
+  }
 
   final case class Platform(
     id: Int,
@@ -78,10 +73,10 @@ object Game {
 
   }
 
-  case class ParentPlatform(id: Int, name: String, slug: String)
+  final case class ParentPlatform(id: Int, name: String, slug: String)
 
   object ParentPlatform {
-    implicit val platformDecoder: Decoder[ParentPlatform] = Decoder.instance { h =>
+    implicit val parentPlatformDecoder: Decoder[ParentPlatform] = Decoder.instance { h =>
       val platform = h.downField("platform")
       (
         platform.get[Int]("id"),
@@ -91,9 +86,13 @@ object Game {
     }
   }
 
-  case class Genre(id: Int, name: String, slug: String, gamesCount: Int, imageBackground: String)
+  final case class Genre(id: Int, name: String, slug: String, gamesCount: Int, imageBackground: String)
 
-  case class Store(id: Int, name: String, slug: String, domain: String, gamesCount: Int, imageBackground: Uri)
+  object Genre {
+    implicit val genreDecoder: Decoder[Genre] = deriveDecoder
+  }
+
+  final case class Store(id: Int, name: String, slug: String, domain: String, gamesCount: Int, imageBackground: Uri)
 
   object Store {
     implicit val storeDecoder: Decoder[Store] = Decoder.instance { h =>
@@ -109,25 +108,12 @@ object Game {
     }
   }
 
-  case class Clip(clip320p: Uri, clip640p: Uri, full: Uri, video: String, preview: Uri)
+  final case class Tag(id: Int, name: String, slug: String, language: String, gamesCount: Int, imageBackground: String)
 
-  object Clip {
-
-    implicit val clipDecoder: Decoder[Clip] = Decoder.instance { h =>
-      val clips = h.downField("clips")
-      (
-        clips.get[Uri]("320"),
-        clips.get[Uri]("640"),
-        clips.get[Uri]("full"),
-        h.get[String]("video"),
-        h.get[Uri]("preview")
-        ).mapN(Clip.apply)
-    }
-
+  object Tag {
+    implicit val tagDecoder: Decoder[Tag] = deriveDecoder
   }
 
-  case class Tag(id: Int, name: String, slug: String, language: String, gamesCount: Int, imageBackground: String)
-
-  case class ShortScreenshot(id: Int, image: String)
+  implicit val gameDecoder: Decoder[Game] = deriveDecoder
 
 }
