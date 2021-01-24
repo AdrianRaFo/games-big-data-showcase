@@ -15,12 +15,12 @@ CREATE TYPE rating_slug AS ENUM(
 );
 
 CREATE TYPE game_ratings AS (
-slug rating_slug NOT NULL,
-total integer NOT NULL,
+slug rating_slug,
+total integer,
 percent numeric
 );
 
-CREATE TABLE games(
+CREATE TABLE games (
 id integer NOT NULL,
 slug text NOT NULL,
 name text NOT NULL,
@@ -39,6 +39,6 @@ parentPlatforms text[],
 genres text[],
 stores text[],
 tags text[],
-esrb_rating esrb_rating,
+esrb_rating esrb_rating
 );
 

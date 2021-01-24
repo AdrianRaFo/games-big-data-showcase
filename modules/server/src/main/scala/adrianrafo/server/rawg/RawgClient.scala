@@ -1,6 +1,7 @@
 package adrianrafo.server.rawg
 
 import adrianrafo.server.config.RawgConfig
+import adrianrafo.server.rawg.game.Game
 import cats.effect.Sync
 import org.http4s.Uri
 import org.http4s.circe.CirceEntityDecoder._
