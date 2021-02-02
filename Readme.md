@@ -1,4 +1,5 @@
 tableau for graphs
 
 Stats:
-most valued genre most valued platform most valued company
+top rated genre top rated platform top rated company where top rated games are published which company is better per
+gender

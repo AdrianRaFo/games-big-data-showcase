@@ -1,15 +1,17 @@
 package adrianrafo.server
 
+import adrianrafo.server.persistence.GameQueries
 import org.scalatest.matchers.should.Matchers
-import doobie.implicits._
+import doobie.scalatest.IOChecker
 
-class DatabaseTest extends DatabaseBaseTest with Matchers {
+class DatabaseTest extends DatabaseBaseTest with IOChecker with Matchers {
 
-  test("Test doobie connection") {
-    sql"SELECT name FROM games where id='123e4567-e89b-12d3-a456-426614174000'"
-      .query[String]
-      .unique
-      .transact(transactor).unsafeRunSync() shouldBe "Cyberpunk 2077"
+  test("GameQueries#insert should work as expected") {
+    check(GameQueries.insert)
+  }
+
+  test("GameQueries#getAll should work as expected") {
+    check(GameQueries.getAll)
   }
 
 }

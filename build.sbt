@@ -63,11 +63,12 @@ lazy val server =
         "org.tpolecat" %% "doobie-core" % doobieV,
         "org.tpolecat" %% "doobie-hikari" % doobieV,
         "org.tpolecat" %% "doobie-postgres" % doobieV,
-        "org.flywaydb" % "flyway-core" % flyWayV,
         "com.github.pureconfig" %% "pureconfig" % pureConfigV,
         "com.github.pureconfig" %% "pureconfig-http4s" % pureConfigV,
         "io.chrisdavenport" %% "log4cats-slf4j" % log4catsV,
-        "ch.qos.logback" % "logback-classic" % logbackClassicV
+        "org.flywaydb" % "flyway-core" % flyWayV,
+        "ch.qos.logback" % "logback-classic" % logbackClassicV,
+        "org.tpolecat" %% "doobie-scalatest" % doobieV % Test
       )
     )
     .dependsOn(processor)

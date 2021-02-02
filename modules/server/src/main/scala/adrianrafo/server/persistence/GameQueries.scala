@@ -1,12 +1,13 @@
 package adrianrafo.server.persistence
 
-import adrianrafo.server.rawg.game.Game
 import doobie._
 import doobie.implicits._
+import doobie.implicits.javatime._
+import doobie.postgres.implicits._
 
 object GameQueries {
 
-  val insert: Update[Game] = Update[Game](
+  val insert: Update[GameDB] = Update[GameDB](
     """INSERT INTO games (
        id,
        slug,
@@ -14,23 +15,31 @@ object GameQueries {
        released,
        tba,
        rating,
-       ratingTop,
-       ratings,
-       ratingsCount,
+       rating_top,
+       ratings_count,
        metacritic,
        playtime,
        updated,
-       reviewsCount,
-       platform,
-       parentPlatforms,
+       reviews_count,
+       platform_slug,
+       platform_released_at,
+       parent_platforms,
        genres,
        stores,
        tags,
-       esrb_rating
-       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+       esrb_rating,
+       exceptional_rated_count,
+       exceptional_rated_percent,
+       recommended_rated_count,
+       recommended_rated_percent,
+       meh_rated_count,
+       meh_rated_percent,
+       skip_rated_count,
+       skip_rated_percent
+       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
   )
 
-  val getAll =
+  val getAll: Query0[GameDB] =
     sql"""SELECT
          id,
          slug,
@@ -38,20 +47,28 @@ object GameQueries {
          released,
          tba,
          rating,
-         ratingTop,
-         ratings,
-         ratingsCount,
+         rating_top,
+         ratings_count,
          metacritic,
          playtime,
          updated,
-         reviewsCount,
-         platform,
-         parentPlatforms,
+         reviews_count,
+         platform_slug,
+         platform_released_at,
+         parent_platforms,
          genres,
          stores,
          tags,
-         esrb_rating
+         esrb_rating,
+         exceptional_rated_count,
+         exceptional_rated_percent,
+         recommended_rated_count,
+         recommended_rated_percent,
+         meh_rated_count,
+         meh_rated_percent,
+         skip_rated_count,
+         skip_rated_percent
        FROM games
-       """
+       """.query[GameDB]
 
 }
