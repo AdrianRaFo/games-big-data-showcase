@@ -29,7 +29,7 @@ object Platform {
       h.downField("platform").get[String]("slug"),
       h.get[Option[String]]("releasedAt"),
       h.get[Option[Platform.Requirements]]("requirements_en")
-      ).mapN(Platform.apply)
+    ).mapN(Platform.apply)
   }
 
 }
@@ -57,7 +57,7 @@ object Store {
       store.get[String]("domain"),
       store.get[Int]("games_count"),
       store.get[String]("image_background")
-      ).mapN(Store.apply)
+    ).mapN(Store.apply)
   }
 }
 
