@@ -1,0 +1,3 @@
+ALTER TABLE games ALTER COLUMN rating TYPE float;
+ALTER TABLE games ALTER COLUMN metacritic DROP NOT NULL;
+

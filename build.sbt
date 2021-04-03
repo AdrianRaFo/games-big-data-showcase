@@ -68,6 +68,7 @@ lazy val server =
         "io.chrisdavenport" %% "log4cats-slf4j" % log4catsV,
         "org.flywaydb" % "flyway-core" % flyWayV,
         "ch.qos.logback" % "logback-classic" % logbackClassicV,
+        "io.circe" %% "circe-literal" % circeV % Test,
         "org.tpolecat" %% "doobie-scalatest" % doobieV % Test
       )
     )

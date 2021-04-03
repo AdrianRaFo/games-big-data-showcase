@@ -10,10 +10,10 @@ final case class GameDB(
   name: String,
   released: LocalDate,
   tba: Boolean, //To be announced
-  rating: Int,
+  rating: Double,
   ratingTop: Int,
   ratingsCount: Int,
-  metacritic: Int,
+  metacritic: Option[Int],
   playtime: Int,
   updated: LocalDateTime,
   reviewsCount: Int,
@@ -41,7 +41,7 @@ object GameDB {
 
     def getRatingPercent(slug: RatingSlug): Double = game.ratings.find(_.title == slug).map(_.percent).getOrElse(0d)
 
-    game.platform.map(platform =>
+    game.platforms.map(platform =>
       new GameDB(
         id = game.id,
         slug = game.slug,

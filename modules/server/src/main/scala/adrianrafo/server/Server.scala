@@ -18,19 +18,21 @@ object Server {
 
   def serve[F[_]: ContextShift: ConcurrentEffect: Timer]: fs2.Stream[F, ExitCode] = {
     val blockingPool: ExecutorService = Executors.newFixedThreadPool(5)
-    val logger                        = Slf4jLogger.getLogger[F]
-    val config: Config                = ConfigSource.default.loadOrThrow[Config]
+    val logger = Slf4jLogger.getLogger[F]
+    val config: Config = ConfigSource.default.loadOrThrow[Config]
 
     val httpClient: Client[F] = JavaNetClientBuilder[F](Blocker.liftExecutorService(blockingPool))
       .withReadTimeout(config.httpClient.requestTimeout)
       .create
 
-    val rawgClient = new RawgClient[F](httpClient, config.rawg)
+    val rawgClient = new RawgClient[F](httpClient, config.rawg)(logger)
 
+    //TODO add migrations
+    //TODO add persistence service
     BlazeServerBuilder
       .apply(ExecutionContext.global)
       .withHttpApp(Routes[F](rawgClient, logger).orNotFound)
-      .bindLocal(0)
+      .bindLocal(38437)
       .serve
   }
 

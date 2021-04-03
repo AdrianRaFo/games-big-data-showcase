@@ -18,7 +18,7 @@ final case class Platform(
 
 object Platform {
 
-  final case class Requirements(minimum: String, recommended: String)
+  final case class Requirements(minimum: String, recommended: Option[String])
 
   object Requirements {
     implicit val requirementsDecoder: Decoder[Requirements] = deriveDecoder
@@ -27,9 +27,9 @@ object Platform {
   implicit val platformDecoder: Decoder[Platform] = Decoder.instance { h =>
     (
       h.downField("platform").get[String]("slug"),
-      h.get[Option[String]]("releasedAt"),
+      h.get[Option[String]]("released_at"),
       h.get[Option[Platform.Requirements]]("requirements_en")
-    ).mapN(Platform.apply)
+      ).mapN(Platform.apply)
   }
 
 }
@@ -44,7 +44,11 @@ object ParentPlatform {
 final case class Genre(slug: String, gamesCount: Int, imageBackground: String)
 
 object Genre {
-  implicit val genreDecoder: Decoder[Genre] = deriveDecoder
+  implicit val genreDecoder: Decoder[Genre] = Decoder.forProduct3(
+    "slug",
+    "games_count",
+    "image_background"
+  )(Genre.apply)
 }
 
 final case class Store(slug: String, domain: String, gamesCount: Int, imageBackground: String)
@@ -64,5 +68,10 @@ object Store {
 final case class Tag(slug: String, language: String, gamesCount: Int, imageBackground: String)
 
 object Tag {
-  implicit val tagDecoder: Decoder[Tag] = deriveDecoder
+  implicit val tagDecoder: Decoder[Tag] = Decoder.forProduct4(
+    "slug",
+    "language",
+    "games_count",
+    "image_background"
+  )(Tag.apply)
 }

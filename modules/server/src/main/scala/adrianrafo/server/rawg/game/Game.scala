@@ -1,7 +1,6 @@
 package adrianrafo.server.rawg.game
 
 import io.circe._
-import io.circe.generic.semiauto.deriveDecoder
 
 import java.time.{LocalDate, LocalDateTime}
 
@@ -11,15 +10,15 @@ final case class Game(
   name: String,
   released: LocalDate,
   tba: Boolean, //To be announced
-  rating: Int,
+  rating: Double,
   ratingTop: Int,
   ratings: List[Ratings],
   ratingsCount: Int,
-  metacritic: Int,
+  metacritic: Option[Int],
   playtime: Int,
   updated: LocalDateTime,
   reviewsCount: Int,
-  platform: List[Platform],
+  platforms: List[Platform],
   parentPlatforms: List[ParentPlatform],
   genres: List[Genre],
   stores: List[Store],
@@ -28,5 +27,24 @@ final case class Game(
 )
 
 object Game {
-  implicit val gameDecoder: Decoder[Game] = deriveDecoder
+  implicit val gameDecoder: Decoder[Game] = Decoder.forProduct19(
+    "id",
+    "slug",
+    "name",
+    "released",
+    "tba",
+    "rating",
+    "rating_top",
+    "ratings",
+    "ratings_count",
+    "metacritic",
+    "playtime",
+    "updated",
+    "reviews_count",
+    "platforms",
+    "parent_platforms",
+    "genres",
+    "stores",
+    "tags",
+    "esrb_rating")(Game.apply)
 }

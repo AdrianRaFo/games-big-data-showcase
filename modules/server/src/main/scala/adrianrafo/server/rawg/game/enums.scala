@@ -2,19 +2,32 @@ package adrianrafo.server.rawg.game
 
 import enumeratum.EnumEntry._
 import enumeratum._
+import io.circe.Decoder
 
 sealed trait EsrbRating extends Hyphencase
 
-object EsrbRating extends Enum[EsrbRating] with CirceEnum[EsrbRating] with DoobieEnum[EsrbRating] {
+object EsrbRating extends Enum[EsrbRating] with DoobieEnum[EsrbRating] {
 
-  case object Everyone       extends EsrbRating
-  case object Everyone10Plus extends EsrbRating
-  case object Teen           extends EsrbRating
-  case object Mature         extends EsrbRating
-  case object AdultsOnly     extends EsrbRating
-  case object RatingPending  extends EsrbRating
+  case object Everyone extends EsrbRating
+
+  case object Everyone10Plus extends EsrbRating {
+    override def entryName: String = "everyone-10-plus"
+  }
+
+  case object Teen extends EsrbRating
+
+  case object Mature extends EsrbRating
+
+  case object AdultsOnly extends EsrbRating
+
+  case object RatingPending extends EsrbRating
 
   val values = findValues
+
+  implicit val esrbRatingDecoder = Decoder.instance { h =>
+    h.downField("slug").as[String].map(EsrbRating.withName)
+  }
+
 }
 
 sealed trait RatingSlug extends EnumEntry with Lowercase
