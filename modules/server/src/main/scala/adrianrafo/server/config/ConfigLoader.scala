@@ -1,6 +1,5 @@
-package adrianrafo.server
+package adrianrafo.server.config
 
-import adrianrafo.server.config.PostgresConfig
 import cats.effect.{Async, Blocker, ContextShift, Sync}
 import doobie.util.ExecutionContexts
 import doobie.util.transactor.Transactor

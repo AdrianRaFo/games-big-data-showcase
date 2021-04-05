@@ -1,5 +1,6 @@
 package adrianrafo.server
 
+import adrianrafo.server.config.Migrations
 import cats.effect.{ContextShift, IO}
 import com.dimafeng.testcontainers.{ForAllTestContainer, PostgreSQLContainer}
 import doobie.Transactor

@@ -5,7 +5,7 @@ import doobie.implicits._
 import doobie.implicits.javatime._
 import doobie.postgres.implicits._
 
-object GameQueries {
+object GamesQueries {
 
   val insert: Update[GameDB] = Update[GameDB](
     """INSERT INTO games (

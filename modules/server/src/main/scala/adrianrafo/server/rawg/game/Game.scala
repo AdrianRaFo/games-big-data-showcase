@@ -46,5 +46,6 @@ object Game {
     "genres",
     "stores",
     "tags",
-    "esrb_rating")(Game.apply)
+    "esrb_rating"
+  )(Game.apply)
 }
