@@ -2,14 +2,13 @@ package adrianrafo.server
 
 import adrianrafo.server.rawg.PagedResponse
 import adrianrafo.server.rawg.game.Game
-import org.scalatest.funsuite.AnyFunSuite
 import io.circe.literal._
-import org.scalatest.matchers.should.Matchers
+import munit.FunSuite
 
-class RawgTest extends AnyFunSuite with Matchers {
+class RawgTest extends FunSuite {
 
   test("Rawg response decoder should work as expected for one game") {
-    RawgTest.responseOne.as[PagedResponse[Game]].isRight shouldBe true
+    assert(RawgTest.responseOne.as[PagedResponse[Game]].isRight)
   }
 
 }

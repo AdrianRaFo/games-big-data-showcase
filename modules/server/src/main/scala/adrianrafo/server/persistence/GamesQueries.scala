@@ -2,7 +2,6 @@ package adrianrafo.server.persistence
 
 import doobie._
 import doobie.implicits._
-import doobie.implicits.javatime._
 import doobie.postgres.implicits._
 
 object GamesQueries {

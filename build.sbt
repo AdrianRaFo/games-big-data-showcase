@@ -1,34 +1,36 @@
 import sbt.Keys.scalaVersion
 
 //Scala
-val circeV = "0.13.0"
+val circeV = "0.14.1"
 val enumeratumV = "1.6.0"
-val http4sV = "0.21.15"
-val http4sClientV = "0.3.3"
-val doobieV = "0.9.4"
-val flyWayV = "7.3.2"
+val http4sV = "0.21.24"
+val http4sClientV = "0.3.7"
+val doobieV = "0.13.4"
+val flyWayV = "7.10.0"
 val log4catsV = "1.1.1"
 val logbackClassicV = "1.2.3"
-val pureConfigV = "0.14.0"
+val pureConfigV = "0.16.0"
 //Test
-val testcontainersV = "0.38.8"
+val munitV = "0.7.26"
+val testcontainersV = "0.39.5"
 //Spark
-val sparkV = "3.0.1"
-val framelessV = "0.9.0"
+val sparkV = "3.1.2"
+val framelessV = "0.10.1"
+
 //compiler plugins
 val betterMonadicForV = "0.3.1"
-val kindProjectorV = "0.11.2"
+val kindProjectorV = "0.13.0"
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.12",
+  scalaVersion := "2.12.14",
   Test / fork := true,
   addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForV),
   addCompilerPlugin("org.typelevel" %% "kind-projector" % kindProjectorV cross CrossVersion.full),
+  testFrameworks += new TestFramework("munit.Framework"),
   libraryDependencies ++= Seq(
-    "org.scalatest" %% "scalatest-funsuite" % "3.2.3" % Test,
-    "org.scalatest" %% "scalatest-shouldmatchers" % "3.2.3" % Test,
+    "org.scalameta" %% "munit" % munitV % Test,
     "com.dimafeng" %% "testcontainers-scala-postgresql" % testcontainersV % Test,
-    "com.dimafeng" %% "testcontainers-scala-scalatest" % testcontainersV % Test
+    "com.dimafeng" %% "testcontainers-scala-munit" % testcontainersV % Test
   )
 )
 
@@ -69,7 +71,7 @@ lazy val server =
         "org.flywaydb" % "flyway-core" % flyWayV,
         "ch.qos.logback" % "logback-classic" % logbackClassicV,
         "io.circe" %% "circe-literal" % circeV % Test,
-        "org.tpolecat" %% "doobie-scalatest" % doobieV % Test
+        "org.tpolecat" %% "doobie-munit" % doobieV % Test
       )
     )
     .dependsOn(processor)
