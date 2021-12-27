@@ -38,7 +38,8 @@ lazy val processor =
     .settings(
       libraryDependencies ++= Seq(
         "org.apache.spark" %% "spark-sql" % sparkV,
-        "org.typelevel" %% "frameless-dataset" % framelessV
+        "org.typelevel" %% "frameless-dataset" % framelessV,
+        "com.beachape" %% "enumeratum" % enumeratumV
       )
     )
 
