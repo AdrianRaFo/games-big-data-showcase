@@ -1,6 +1,6 @@
 package adrianrafo.server.persistence
 
-import adrianrafo.server.rawg.game.{EsrbRating, Game, RatingSlug}
+import adrianrafo.server.rawg.game._
 
 import java.time.{LocalDate, LocalDateTime}
 
@@ -9,7 +9,7 @@ final case class GameDB(
   slug: String,
   name: String,
   released: LocalDate,
-  tba: Boolean, //To be announced
+  tba: Boolean, // To be announced
   rating: Double,
   ratingTop: Int,
   ratingsCount: Int,

@@ -9,7 +9,7 @@ final case class Game(
   slug: String,
   name: String,
   released: LocalDate,
-  tba: Boolean, //To be announced
+  tba: Boolean, // To be announced
   rating: Double,
   ratingTop: Int,
   ratings: List[Ratings],

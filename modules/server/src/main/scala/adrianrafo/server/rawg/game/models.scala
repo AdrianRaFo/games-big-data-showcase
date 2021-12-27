@@ -1,8 +1,8 @@
 package adrianrafo.server.rawg.game
 
+import cats.implicits._
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
-import cats.implicits._
 
 final case class Ratings(title: RatingSlug, count: Int, percent: Double)
 
