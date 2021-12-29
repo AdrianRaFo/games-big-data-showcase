@@ -4,7 +4,7 @@ import org.http4s.Uri
 
 import scala.concurrent.duration.FiniteDuration
 
-final case class RawgConfig(baseUri: Uri, token: String)
+final case class RawgConfig(baseUri: Uri, token: String, defaultPageSize: Int)
 
 final case class PostgresConfig(
   driver: String,

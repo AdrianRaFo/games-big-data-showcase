@@ -11,4 +11,6 @@ class GamesPersistence[F[_] : Sync](tx: Transactor[F]) {
 
   def insert(games: List[GameDB]): F[Int] = GamesQueries.insert.updateMany(games).transact(tx)
 
+  def countAll: F[Int] = GamesQueries.countAll.unique.transact(tx)
+
 }

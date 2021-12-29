@@ -9,5 +9,5 @@ import org.http4s.circe.decodeUri
 final case class PagedResponse[A](count: Int, next: Option[Uri], previous: Option[Uri], results: List[A])
 
 object PagedResponse {
-  implicit val gamePagedResponseDecoder: Decoder[PagedResponse[Game]] = deriveDecoder
+  implicit val gamePagedResponseDecoder: Decoder[PagedResponse[Game[Option]]] = deriveDecoder
 }

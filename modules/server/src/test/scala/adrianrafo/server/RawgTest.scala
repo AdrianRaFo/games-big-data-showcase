@@ -8,7 +8,7 @@ import munit.FunSuite
 class RawgTest extends FunSuite {
 
   test("Rawg response decoder should work as expected for one game") {
-    assert(RawgTest.responseOne.as[PagedResponse[Game]].isRight)
+    assert(RawgTest.responseOne.as[PagedResponse[Game[Option]]].isRight)
   }
 
 }

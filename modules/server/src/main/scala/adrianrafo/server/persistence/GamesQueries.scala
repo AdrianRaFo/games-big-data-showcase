@@ -70,4 +70,6 @@ object GamesQueries {
        FROM games
        """.query[GameDB]
 
+  val countAll = sql"select count(*) from games".query[Int]
+
 }

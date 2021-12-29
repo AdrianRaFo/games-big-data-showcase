@@ -4,11 +4,11 @@ import io.circe._
 
 import java.time.{LocalDate, LocalDateTime}
 
-final case class Game(
+final case class Game[F[_]](
   id: Int,
   slug: String,
   name: String,
-  released: LocalDate,
+  released: F[LocalDate],
   tba: Boolean, // To be announced
   rating: Double,
   ratingTop: Int,
@@ -24,10 +24,16 @@ final case class Game(
   stores: List[Store],
   tags: List[Tag],
   esrbRating: Option[EsrbRating]
-)
+) {
+  def toG[G[_]](newReleased: G[LocalDate]): Game[G] = copy[G](released = newReleased)
+}
 
 object Game {
-  implicit val gameDecoder: Decoder[Game] = Decoder.forProduct19(
+
+  implicit private def listDecoder[A: Decoder]: Decoder[List[A]] =
+    Decoder.decodeOption[List[A]](Decoder.decodeList[A]).map(_.getOrElse(Nil))
+
+  implicit val gameDecoder: Decoder[Game[Option]] = Decoder.forProduct19(
     "id",
     "slug",
     "name",
@@ -47,5 +53,5 @@ object Game {
     "stores",
     "tags",
     "esrb_rating"
-  )(Game.apply)
+  )(Game.apply[Option])
 }

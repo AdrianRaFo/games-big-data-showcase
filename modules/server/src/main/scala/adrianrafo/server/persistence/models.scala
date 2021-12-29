@@ -1,6 +1,7 @@
 package adrianrafo.server.persistence
 
 import adrianrafo.server.rawg.game._
+import cats.Id
 
 import java.time.{LocalDate, LocalDateTime}
 
@@ -35,7 +36,7 @@ final case class GameDB(
 )
 
 object GameDB {
-  def apply(game: Game): List[GameDB] = {
+  def apply(game: Game[Id]): List[GameDB] = {
 
     def getRatingCount(slug: RatingSlug): Int = game.ratings.find(_.title == slug).map(_.count).getOrElse(0)
 

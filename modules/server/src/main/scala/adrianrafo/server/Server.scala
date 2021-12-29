@@ -31,12 +31,11 @@ object Server {
       _ <- Stream.eval(Migrations.makeMigrationsFromConfig(config.postgres))
       transactor <- Stream.eval(ConfigLoader.loadTransactor(config.postgres))
       gamesPersistence = new GamesPersistence[F](transactor)
-      rawgClient = new RawgClient[F](config.rawg, httpClient, logger, gamesPersistence)
-      server <-
-        BlazeServerBuilder[F]
-          .withHttpApp(Routes[F](rawgClient, logger).orNotFound)
-          .bindLocal(38437)
-          .serve
+      rawgClient = new RawgClient[F](config.rawg, httpClient, logger)
+      server <- BlazeServerBuilder[F]
+        .withHttpApp(Routes[F](rawgClient, logger, gamesPersistence).orNotFound)
+        .bindLocal(38437)
+        .serve
     } yield server
 
   }
