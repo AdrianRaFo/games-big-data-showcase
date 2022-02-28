@@ -1,11 +1,11 @@
 //Scala
 val circeV = "0.14.1"
 val enumeratumV = "1.7.0"
-val http4sV = "0.23.7"
+val http4sV = "0.23.9"
 val http4sClientV = "0.5.0"
 val doobieV = "1.0.0-RC1"
-val flyWayV = "8.3.0"
-val log4catsV = "2.1.1"
+val flyWayV = "8.5.0"
+val log4catsV = "2.2.0"
 val logbackClassicV = "1.2.10"
 val pureConfigV = "0.17.1"
 //Test
@@ -14,6 +14,7 @@ val testcontainersV = "0.39.12"
 //Spark
 val sparkV = "3.2.0"
 val framelessV = "0.11.1"
+val postgresqlV = "42.3.3"
 
 //compiler plugins
 val betterMonadicForV = "0.3.1"
@@ -37,6 +38,8 @@ lazy val processor =
     .settings(commonSettings)
     .settings(
       libraryDependencies ++= Seq(
+        "com.github.pureconfig" %% "pureconfig" % pureConfigV,
+        "org.postgresql" % "postgresql" % postgresqlV,
         "org.apache.spark" %% "spark-sql" % sparkV,
         "org.typelevel" %% "frameless-dataset" % framelessV,
         "com.beachape" %% "enumeratum" % enumeratumV

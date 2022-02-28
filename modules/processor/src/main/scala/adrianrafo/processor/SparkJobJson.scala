@@ -2,7 +2,7 @@ package adrianrafo.processor
 
 import org.apache.spark.sql.SparkSession
 
-object SparkJob {
+object SparkJobJson {
 
   def main(args: Array[String]) = {
     val spark = SparkSession
@@ -25,5 +25,7 @@ object SparkJob {
     sqlDF.show()
     spark.stop()
   }
+
+  final case class Tag(slug: String, language: String, games_count: Long, image_background: String)
 
 }
